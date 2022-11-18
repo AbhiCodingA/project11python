@@ -130,6 +130,35 @@ def login():
     Label(login_screen, text="").pack()
     Button(login_screen, text="Login", width=10, height=1, command=login_verify).pack()
 
+
+def supervisor_user():
+    global login_screen
+    login_screen = Toplevel(main_screen)
+    login_screen.title("Login")
+    login_screen.geometry("300x250")
+    Label(login_screen, text="Please enter details below to login").pack()
+    Label(login_screen, text="").pack()
+
+    global username_verify
+    global password_verify
+
+    username_verify = StringVar()
+    password_verify = StringVar()
+
+    global username_login_entry
+    global password_login_entry
+
+    Label(login_screen, text="Username * ").pack()
+    username_login_entry = Entry(login_screen, textvariable=username_verify)
+    username_login_entry.pack()
+    Label(login_screen, text="").pack()
+    Label(login_screen, text="Password * ").pack()
+    password_login_entry = Entry(login_screen, textvariable=password_verify, show='*')
+    password_login_entry.pack()
+    Label(login_screen, text="").pack()
+    Button(login_screen, text="Login", width=10, height=1, command=login_verify).pack()
+
+
 # Implementing event on register button
 
 def register_user():
@@ -147,6 +176,7 @@ def register_user():
     password_entry.delete(0, END)
 
     Label(register_screen, text="Registration Success", fg="green", font=("calibri", 11)).pack()
+
 
 def newsupervisor_user():
     global login_screen
@@ -216,9 +246,38 @@ def login_verify():
         user_not_found()
 
 
+def supervisor_verify():
+    username1 = username_verify.get()
+    password1 = password_verify.get()
+    username_login_entry.delete(0, END)
+    password_login_entry.delete(0, END)
+
+    list_of_files = os.listdir()
+    if username1 in list_of_files:
+        file1 = open(username1, "r")
+        verify = file1.read().splitlines()
+        if password1 in verify:
+            login_sucess()
+
+        else:
+            password_not_recognised()
+
+    else:
+        user_not_found()
+
+
 # Designing popup for login success
 
 def login_sucess():
+    global login_success_screen
+    login_success_screen = Toplevel(login_screen)
+    login_success_screen.title("Success")
+    login_success_screen.geometry("250x150")
+    Label(login_success_screen, text="Login Success").pack()
+    Button(login_success_screen, text="OK", command=delete_login_success).pack()
+
+
+def supervisor_sucess():
     global login_success_screen
     login_success_screen = Toplevel(login_screen)
     login_success_screen.title("Success")
@@ -278,7 +337,7 @@ def main_account_screen():
     Label(text="").pack()
     Button(text="New supervisor", height="2", width="30", command=newsupervisor).pack()
     Label(text="").pack()
-    Button(text="Supervisor Login",height="2", width="30", command=newsupervisor).pack()
+    Button(text="Supervisor Login", height="2", width="30", command=supervisor_user).pack()
     main_screen.mainloop()
 
 
